@@ -1,0 +1,8 @@
+{
+  "name": "gulp-coffee-starter",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "~3.3.1"
+  }
+}
