@@ -101,30 +101,8 @@ createFilename = (name,ext)->
 gulp.task 'clean', (callback) ->
 	del(['build', 'app/vendor/**/*', '!app/vendor/**/*.custom*', ], callback)
 
-gulp.task 'vendor-files', ->
-	scripts =  gulpFilter '**/*.js'
 	styles = gulpFilter '**/*.css'
 	fonts = gulpFilter '**/*.{woff,ttf,svg,eot,otf}'
-
-	gulp.src(mainBowerFiles(options.mainBowerFiles))
-		.pipe(scripts)
-		.pipe(gulp.dest(paths.scripts.vendor.dump))
-		.pipe(scripts.restore())
-
-		.pipe(styles)
-		.pipe(gulp.dest(paths.styles.vendor.dump))
-		.pipe(styles.restore())
-
-		.pipe(fonts)
-		.pipe(gulp.dest(paths.fonts.vendor.dump))
-		.pipe(fonts.restore())
-
-gulp.task 'fonts-vendor', ->
-	gulp.src(paths.fonts.vendor.src)
-		.pipe(gulpPlumber())
-		.pipe(gulp.dest(paths.fonts.vendor.dest))
-		.pipe(reload({stream: true}))
-
 gulp.task 'styles', ->
 	outputFileName = createFilename('styles', 'css')
 
