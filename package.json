@@ -11,6 +11,9 @@
     "install": "./node_modules/.bin/bower install"
   },
   "devDependencies": {
+    "coffee-script": "^1.9.2",
+    "gulp": "^3.9.0",
+    "gulp-flatten": "^0.2.0"
     "bower": "^1.4.1",
     "browser-sync": "^2.6.4",
     "del": "^1.1.1",
@@ -33,7 +36,5 @@
     "main-bower-files": "^2.6.2",
     "run-sequence": "^1.0.2"
   },
-  "dependencies": {
-    "coffee-script": "^1.9.2"
-  }
+  "dependencies": {}
 }

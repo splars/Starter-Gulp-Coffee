@@ -1,3 +1,5 @@
+sourceFilePaths = require('./paths')
+
 options = 
 	autoprefixer: ['last 2 versions', '> 5%']
 	browserSync: 
@@ -5,19 +7,20 @@ options =
 			baseDir: 'build'
 	coffee: 
 		bare: true
-	gulpInject:
+	gulpInject: 
 		ignorePath: 'build'
 	jade:
 		pretty: global.isDevelopment
 		locals:
 			isDevelopment: global.isDevelopment
 			isProduction: global.isProduction
-	minifyCss:
-		keepSpecialComments: 0			
-	sass: 	
+	minifyCss: 
+		keepSpecialComments: 0
+	sass:
 		outputStyle: if global.isProduction then 'compressed' else 'nested'
 		sourceComments: 'map'
-	uglify:
+		includePaths: sourceFilePaths.styles.sassHelpers
+	uglify: 
 		mangle: false
-
+  
 module.exports = options
