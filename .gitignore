@@ -1,5 +1,5 @@
 node_modules
 app/bower_components
-app/vendor
-!app/vendor/*custom*
+vendor
+!vendor/*custom*
 build

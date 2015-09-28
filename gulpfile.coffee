@@ -1,39 +1,41 @@
-gulp = require 'gulp'
-browserSync = require 'browser-sync'
+gulp = require('gulp')
+browserSync = require('browser-sync')
 reload = browserSync.reload
-del = require 'del'
-runSequence = require 'run-sequence'
-gulpNodemon = require 'gulp-nodemon'
-gulpPlumber = require 'gulp-plumber'
+del = require('del')
+runSequence = require('run-sequence')
+gulpNodemon = require('gulp-nodemon')
+gulpPlumber = require('gulp-plumber')
+mainBowerFiles = require('main-bower-files')
+gulpSass = require('gulp-sass')
+gulpAutoprefixer = require('gulp-autoprefixer')
+gulpMinifyCss = require('gulp-minify-css')
+gulpJade = require('gulp-jade')
+gulpCoffee = require('gulp-coffee')
+gulpConcat = require('gulp-concat')
+gulpFilter = require('gulp-filter')
+gulpFlatten = require('gulp-flatten')
+gulpIf = require('gulp-if')
+gulpInject = require('gulp-inject')
+gulpJshint = require('gulp-jshint')
+gulpRename = require('gulp-rename')
+gulpRev = require('gulp-rev')
+gulpUglify = require('gulp-uglify')
+gulpInject = require('gulp-inject')
+process.env.NODE_ENV = process.env.NODE_ENV or 'development'
+global.isProduction = process.env.NODE_ENV == 'production'
+global.isDevelopment = process.env.NODE_ENV == 'development'
+paths = require('./gulp/paths')
+options = require('./gulp/pluginOptions')
 
-mainBowerFiles = require 'main-bower-files'
-gulpSass = require 'gulp-sass'
-gulpAutoprefixer = require 'gulp-autoprefixer'
-gulpMinifyCss = require 'gulp-minify-css'
-gulpJade = require 'gulp-jade'
-gulpCoffee = require 'gulp-coffee'
-gulpConcat = require 'gulp-concat'
-gulpFilter = require 'gulp-filter'
-gulpIf = require 'gulp-if'
-gulpInject = require 'gulp-inject'
-gulpJshint = require 'gulp-jshint'
-gulpRename = require 'gulp-rename'
-gulpRev = require 'gulp-rev'
-gulpUglify = require 'gulp-uglify'
-gulpInject = require 'gulp-inject'
-
-process.env.NODE_ENV = process.env.NODE_ENV || 'development' #NODE_ENV=production gulp
-global.isProduction = (process.env.NODE_ENV == 'production')
-global.isDevelopment = (process.env.NODE_ENV == 'development')
-
-paths = require './gulp/paths'
-options = require './gulp/pluginOptions'
-
-createFilename = (name,ext)->
-	name+'.'+ext
+createFilename = (name, ext) ->
+	name + '.' + ext
 
 gulp.task 'clean', (callback) ->
-	del(['build', 'app/vendor/**/*', '!app/vendor/**/*.custom*', ], callback)
+	del [
+		'build'
+		'vendor/**/*'
+		'!vendor/**/*.custom*'
+	], callback
 
 gulp.task 'styles', ->
 	outputFileName = createFilename('styles', 'css')
@@ -57,6 +59,12 @@ gulp.task 'scripts', ->
 		.pipe(gulpIf(isProduction, gulpRev()))
 		.pipe(gulp.dest(paths.scripts.custom.dest))
 		.pipe(reload({stream: true}))
+		
+gulp.task 'images', ->
+	gulp.src(paths.images.custom.src)
+		.pipe(gulpPlumber()).pipe(gulpFlatten())
+		.pipe(gulp.dest(paths.images.custom.dest))
+		.pipe reload(stream: true)
 
 gulp.task 'templates', ->
 	gulp.src(paths.templates.src)
@@ -131,13 +139,14 @@ gulp.task 'watch', ->
 	gulp.watch paths.fonts.vendor.src, ['vendor:fonts']
 	gulp.watch [paths.styles.vendor.src, './build*.html'], reload
 	gulp.watch './bower.json', ['vendor']
+	gulp.watch paths.templates.src, [ 'templates' ]
 
 gulp.task 'browser-sync', ->
-  browserSync.init null, options.browserSync
-  return
+	browserSync.init null, options.browserSync
+	return
 
 gulp.task 'default', ['clean'], (callback) ->
-	runSequence(['styles', 'scripts', 'vendor'], ['templates', 'index'], callback)  
+	runSequence(['styles', 'scripts', 'vendor', 'images'], ['templates', 'index'], callback)  
 	return
 
 gulp.task 'serve', ['default'], ->
